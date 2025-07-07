@@ -1,348 +1,689 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的 GitHub Pages 网站</title>
-  <!-- 引入 Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 引入 Font Awesome -->
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  
-  <!-- 配置 Tailwind -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#165DFF',
-            secondary: '#36CFC9',
-            dark: '#1D2129',
-          },
-          fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
-      }
-    }
-  </script>
-  
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .text-shadow {
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      }
-      .transition-custom {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-    }
-  </style>
-</head>
-<body class="font-inter bg-gray-50 text-dark">
-  <!-- 导航栏 -->
-  <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-custom">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="#" class="text-primary font-bold text-xl">MySite</a>
-      <nav class="hidden md:flex space-x-6">
-        <a href="#" class="font-medium hover:text-primary transition-custom">首页</a>
-        <a href="#about" class="font-medium hover:text-primary transition-custom">关于</a>
-        <a href="#projects" class="font-medium hover:text-primary transition-custom">项目</a>
-        <a href="#contact" class="font-medium hover:text-primary transition-custom">联系</a>
-      </nav>
-      <button class="md:hidden text-dark focus:outline-none">
-        <i class="fa fa-bars text-xl"></i>
-      </button>
-    </div>
-  </header>
-
-  <!-- 英雄区域 -->
-  <section class="pt-32 pb-20 bg-gradient-to-br from-primary/5 to-secondary/5">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-      <div class="md:w-1/2 mb-10 md:mb-0">
-        <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark">
-          你好，我是 <span class="text-primary">开发者</span>
-        </h1>
-        <p class="mt-4 text-lg text-gray-600 max-w-xl">
-          这里是我的个人网站，展示我的项目、博客和技能。通过代码创造价值，解决问题。
-        </p>
-        <div class="mt-8 flex space-x-4">
-          <a href="#projects" class="px-6 py-3 bg-primary text-white rounded-lg shadow-lg hover:shadow-xl hover:bg-primary/90 transition-custom">
-            查看项目
-          </a>
-          <a href="#contact" class="px-6 py-3 bg-white text-primary border border-primary rounded-lg hover:bg-gray-50 transition-custom">
-            联系我
-          </a>
-        </div>
-      </div>
-      <div class="md:w-1/2 flex justify-center">
-        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full bg-primary/10 flex items-center justify-center">
-          <img src="https://picsum.photos/seed/developer/400/400" alt="开发者头像" class="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-white shadow-xl">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 关于我 -->
-  <section id="about" class="py-20 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center mb-16">关于我</h2>
-      <div class="flex flex-col md:flex-row items-center gap-12">
-        <div class="md:w-1/3">
-          <img src="https://picsum.photos/seed/about/600/800" alt="关于我的图片" class="w-full h-auto rounded-xl shadow-lg">
-        </div>
-        <div class="md:w-2/3">
-          <p class="text-lg text-gray-700 leading-relaxed mb-6">
-            我是一名全栈开发者，热爱创造和学习新技术。拥有多年 Web 开发经验，擅长前端框架和后端服务搭建。
-          </p>
-          <p class="text-lg text-gray-700 leading-relaxed mb-8">
-            我的使命是通过技术解决实际问题，创造有价值的产品和体验。除了编程，我还喜欢阅读、旅行和摄影。
-          </p>
-          
-          <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="flex items-center">
-              <i class="fa fa-code text-primary mr-3 text-xl"></i>
-              <span>全栈开发</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fa fa-paint-brush text-primary mr-3 text-xl"></i>
-              <span>UI/UX 设计</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fa fa-mobile text-primary mr-3 text-xl"></i>
-              <span>移动应用</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fa fa-server text-primary mr-3 text-xl"></i>
-              <span>后端服务</span>
-            </div>
-          </div>
-          
-          <a href="#contact" class="inline-flex items-center text-primary font-medium hover:underline">
-            了解更多 <i class="fa fa-arrow-right ml-2"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 项目展示 -->
-  <section id="projects" class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center mb-16">我的项目</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- 项目卡片 1 -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-custom group">
-          <img src="https://picsum.photos/seed/project1/600/400" alt="项目 1" class="w-full h-48 object-cover group-hover:scale-105 transition-custom">
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2">网站重构项目</h3>
-            <p class="text-gray-600 mb-4">为客户重新设计并开发了响应式网站，提升了用户体验和页面加载速度。</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">HTML</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">CSS</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">JavaScript</span>
-            </div>
-            <a href="#" class="inline-flex items-center text-primary font-medium hover:underline">
-              查看详情 <i class="fa fa-external-link ml-2"></i>
-            </a>
-          </div>
-        </div>
-        
-        <!-- 项目卡片 2 -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-custom group">
-          <img src="https://picsum.photos/seed/project2/600/400" alt="项目 2" class="w-full h-48 object-cover group-hover:scale-105 transition-custom">
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2">数据可视化工具</h3>
-            <p class="text-gray-600 mb-4">开发了一个交互式数据可视化平台，帮助用户分析和展示复杂数据。</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">React</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">D3.js</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Node.js</span>
-            </div>
-            <a href="#" class="inline-flex items-center text-primary font-medium hover:underline">
-              查看详情 <i class="fa fa-external-link ml-2"></i>
-            </a>
-          </div>
-        </div>
-        
-        <!-- 项目卡片 3 -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-custom group">
-          <img src="https://picsum.photos/seed/project3/600/400" alt="项目 3" class="w-full h-48 object-cover group-hover:scale-105 transition-custom">
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2">电商平台</h3>
-            <p class="text-gray-600 mb-4">设计并实现了一个完整的电子商务解决方案，包括支付系统和库存管理。</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Vue.js</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Express</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">MongoDB</span>
-            </div>
-            <a href="#" class="inline-flex items-center text-primary font-medium hover:underline">
-              查看详情 <i class="fa fa-external-link ml-2"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 联系我 -->
-  <section id="contact" class="py-20 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center mb-16">联系我</h2>
-      
-      <div class="max-w-3xl mx-auto">
-        <form class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label for="name" class="block text-gray-700 font-medium mb-2">姓名</label>
-              <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring focus:ring-primary/20 focus:outline-none transition-custom" placeholder="请输入您的姓名">
-            </div>
-            <div>
-              <label for="email" class="block text-gray-700 font-medium mb-2">邮箱</label>
-              <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring focus:ring-primary/20 focus:outline-none transition-custom" placeholder="请输入您的邮箱">
-            </div>
-          </div>
-          
-          <div>
-            <label for="subject" class="block text-gray-700 font-medium mb-2">主题</label>
-            <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring focus:ring-primary/20 focus:outline-none transition-custom" placeholder="请输入主题">
-          </div>
-          
-          <div>
-            <label for="message" class="block text-gray-700 font-medium mb-2">留言</label>
-            <textarea id="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring focus:ring-primary/20 focus:outline-none transition-custom" placeholder="请输入您的留言内容"></textarea>
-          </div>
-          
-          <div class="flex justify-center">
-            <button type="submit" class="px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:shadow-xl hover:bg-primary/90 transition-custom">
-              发送消息
-            </button>
-          </div>
-        </form>
-        
-        <div class="mt-12 text-center">
-          <h3 class="text-xl font-bold mb-4">其他联系方式</h3>
-          <div class="flex justify-center space-x-6">
-            <a href="#" class="text-gray-500 hover:text-primary transition-custom">
-              <i class="fa fa-github text-2xl"></i>
-            </a>
-            <a href="#" class="text-gray-500 hover:text-primary transition-custom">
-              <i class="fa fa-linkedin text-2xl"></i>
-            </a>
-            <a href="#" class="text-gray-500 hover:text-primary transition-custom">
-              <i class="fa fa-twitter text-2xl"></i>
-            </a>
-            <a href="#" class="text-gray-500 hover:text-primary transition-custom">
-              <i class="fa fa-envelope text-2xl"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 页脚 -->
-  <footer class="bg-dark text-white py-12">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-          <h3 class="text-xl font-bold mb-2">MySite</h3>
-          <p class="text-gray-400">个人作品集与博客</p>
-        </div>
-        
-        <div class="flex flex-wrap justify-center gap-8">
-          <div>
-            <h4 class="text-lg font-medium mb-3">快速链接</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-gray-400 hover:text-white transition-custom">首页</a></li>
-              <li><a href="#about" class="text-gray-400 hover:text-white transition-custom">关于</a></li>
-              <li><a href="#projects" class="text-gray-400 hover:text-white transition-custom">项目</a></li>
-              <li><a href="#contact" class="text-gray-400 hover:text-white transition-custom">联系</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 class="text-lg font-medium mb-3">联系方式</h4>
-            <ul class="space-y-2">
-              <li class="flex items-center">
-                <i class="fa fa-envelope-o mr-2 text-gray-400"></i>
-                <a href="mailto:example@mail.com" class="text-gray-400 hover:text-white transition-custom">example@mail.com</a>
-              </li>
-              <li class="flex items-center">
-                <i class="fa fa-phone mr-2 text-gray-400"></i>
-                <span class="text-gray-400">+123 456 7890</span>
-              </li>
-              <li class="flex items-center">
-                <i class="fa fa-map-marker mr-2 text-gray-400"></i>
-                <span class="text-gray-400">北京市朝阳区</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-        <p>© 2025 MySite. 保留所有权利。</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- 返回顶部按钮 -->
-  <button id="backToTop" class="fixed bottom-6 right-6 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-custom">
-    <i class="fa fa-arrow-up"></i>
-  </button>
-
-  <script>
-    // 导航栏滚动效果
-    const header = document.querySelector('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('py-2');
-        header.classList.remove('py-3');
-      } else {
-        header.classList.add('py-3');
-        header.classList.remove('py-2');
-      }
-    });
-    
-    // 返回顶部按钮
-    const backToTopBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTopBtn.classList.remove('opacity-0', 'invisible');
-        backToTopBtn.classList.add('opacity-100', 'visible');
-      } else {
-        backToTopBtn.classList.add('opacity-0', 'invisible');
-        backToTopBtn.classList.remove('opacity-100', 'visible');
-      }
-    });
-    
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-    
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({
-            behavior: 'smooth'
-          });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundWave - 个人音乐库</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#7B61FF',
+                        dark: '#121212',
+                        'dark-light': '#1E1E1E',
+                        'dark-lighter': '#2D2D2D',
+                        'text-primary': '#FFFFFF',
+                        'text-secondary': '#A0A0A0',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
         }
-      });
-    });
-  </script>
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .music-visualizer {
+                display: flex;
+                align-items: flex-end;
+                height: 30px;
+                gap: 2px;
+            }
+            .music-visualizer span {
+                width: 3px;
+                background-color: theme('colors.primary');
+                animation: equalize 1s infinite;
+                border-radius: 1px;
+            }
+            @keyframes equalize {
+                0%, 100% { height: calc(10% + var(--random) * 90%); }
+                50% { height: calc(40% + var(--random) * 60%); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark text-text-primary font-inter min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-dark-light fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button id="sidebar-toggle" class="lg:hidden text-text-primary hover:text-primary transition-colors">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <i class="fa fa-music text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">SoundWave</h1>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
+                <div class="relative w-full">
+                    <input type="text" placeholder="搜索音乐、艺术家或专辑..." 
+                        class="w-full bg-dark-lighter text-text-primary rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
+                    <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary"></i>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="md:hidden text-text-primary hover:text-primary transition-colors">
+                    <i class="fa fa-search text-xl"></i>
+                </button>
+                <button class="text-text-primary hover:text-primary transition-colors">
+                    <i class="fa fa-bell text-xl"></i>
+                </button>
+                <div class="relative group">
+                    <button class="flex items-center space-x-2">
+                        <img src="https://picsum.photos/id/64/200" alt="用户头像" class="w-8 h-8 rounded-full object-cover border-2 border-primary">
+                        <span class="hidden lg:inline-block text-sm font-medium">用户名</span>
+                        <i class="fa fa-angle-down text-text-secondary"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-dark-lighter rounded-lg shadow-lg py-2 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                        <a href="#" class="block px-4 py-2 text-sm text-text-primary hover:bg-primary/20 hover:text-primary transition-colors">
+                            <i class="fa fa-user mr-2"></i>个人资料
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-sm text-text-primary hover:bg-primary/20 hover:text-primary transition-colors">
+                            <i class="fa fa-cog mr-2"></i>设置
+                        </a>
+                        <div class="border-t border-dark-lighter my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors">
+                            <i class="fa fa-sign-out mr-2"></i>退出登录
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="fixed left-0 top-16 bottom-20 w-64 bg-dark-light transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40 overflow-y-auto scrollbar-hide">
+            <nav class="p-4 space-y-6">
+                <div>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg bg-primary/10 text-primary">
+                                <i class="fa fa-home text-lg w-5 text-center"></i>
+                                <span>主页</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-compass text-lg w-5 text-center"></i>
+                                <span>发现</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-history text-lg w-5 text-center"></i>
+                                <span>最近播放</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-heart text-lg w-5 text-center"></i>
+                                <span>喜欢的歌曲</span>
+                                <span class="ml-auto bg-primary/20 text-primary text-xs px-2 py-1 rounded-full">24</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h2 class="text-xs uppercase text-text-secondary font-semibold px-3 mb-2">你的音乐</h2>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-list text-lg w-5 text-center"></i>
+                                <span>播放列表</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-music text-lg w-5 text-center"></i>
+                                <span>所有歌曲</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-folder text-lg w-5 text-center"></i>
+                                <span>本地音乐</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-users text-lg w-5 text-center"></i>
+                                <span>艺术家</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-archive text-lg w-5 text-center"></i>
+                                <span>专辑</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h2 class="text-xs uppercase text-text-secondary font-semibold px-3 mb-2">播放列表</h2>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-headphones text-lg w-5 text-center"></i>
+                                <span>工作专注</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-car text-lg w-5 text-center"></i>
+                                <span>驾驶必备</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-coffee text-lg w-5 text-center"></i>
+                                <span>咖啡厅氛围</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-dark-lighter transition-colors">
+                                <i class="fa fa-gamepad text-lg w-5 text-center"></i>
+                                <span>游戏激情</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="px-3">
+                    <button class="w-full flex items-center justify-center space-x-2 py-2 rounded-lg border border-dashed border-text-secondary/30 hover:border-primary/50 hover:bg-primary/5 transition-all text-text-secondary hover:text-primary">
+                        <i class="fa fa-plus"></i>
+                        <span>新建播放列表</span>
+                    </button>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 遮罩层 -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 lg:hidden hidden"></div>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 lg:ml-64 p-6 overflow-y-auto scrollbar-hide">
+            <div class="max-w-7xl mx-auto">
+                <!-- 欢迎信息 -->
+                <div class="mb-10">
+                    <h1 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-2">欢迎回来，用户</h1>
+                    <p class="text-text-secondary">发现新音乐，享受美好时光</p>
+                </div>
+                
+                <!-- 快速访问 -->
+                <section class="mb-12">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">快速访问</h2>
+                        <a href="#" class="text-primary hover:underline text-sm">查看全部</a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- 快速访问卡片 -->
+                        <div class="bg-dark-lighter rounded-lg overflow-hidden flex items-center hover:bg-dark-lighter/80 transition-all group">
+                            <img src="https://picsum.photos/id/26/200/200" alt="专辑封面" class="w-16 h-16 object-cover">
+                            <div class="flex-1 px-4">
+                                <h3 class="font-medium truncate">流行精选</h3>
+                                <p class="text-xs text-text-secondary">各种流行音乐合集</p>
+                            </div>
+                            <button class="opacity-0 group-hover:opacity-100 transition-opacity mr-4">
+                                <i class="fa fa-play-circle text-primary text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-lg overflow-hidden flex items-center hover:bg-dark-lighter/80 transition-all group">
+                            <img src="https://picsum.photos/id/96/200/200" alt="专辑封面" class="w-16 h-16 object-cover">
+                            <div class="flex-1 px-4">
+                                <h3 class="font-medium truncate">摇滚经典</h3>
+                                <p class="text-xs text-text-secondary">永恒的摇滚之声</p>
+                            </div>
+                            <button class="opacity-0 group-hover:opacity-100 transition-opacity mr-4">
+                                <i class="fa fa-play-circle text-primary text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-lg overflow-hidden flex items-center hover:bg-dark-lighter/80 transition-all group">
+                            <img src="https://picsum.photos/id/119/200/200" alt="专辑封面" class="w-16 h-16 object-cover">
+                            <div class="flex-1 px-4">
+                                <h3 class="font-medium truncate">电子舞曲</h3>
+                                <p class="text-xs text-text-secondary">充满活力的节奏</p>
+                            </div>
+                            <button class="opacity-0 group-hover:opacity-100 transition-opacity mr-4">
+                                <i class="fa fa-play-circle text-primary text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-lg overflow-hidden flex items-center hover:bg-dark-lighter/80 transition-all group">
+                            <img src="https://picsum.photos/id/174/200/200" alt="专辑封面" class="w-16 h-16 object-cover">
+                            <div class="flex-1 px-4">
+                                <h3 class="font-medium truncate">轻音乐</h3>
+                                <p class="text-xs text-text-secondary">放松身心的旋律</p>
+                            </div>
+                            <button class="opacity-0 group-hover:opacity-100 transition-opacity mr-4">
+                                <i class="fa fa-play-circle text-primary text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 最近播放 -->
+                <section class="mb-12">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">最近播放</h2>
+                        <a href="#" class="text-primary hover:underline text-sm">查看全部</a>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        <!-- 专辑卡片 -->
+                        <div class="bg-dark-lighter rounded-xl p-4 hover:bg-dark-lighter/80 transition-all group">
+                            <div class="relative mb-4">
+                                <img src="https://picsum.photos/id/26/300/300" alt="专辑封面" class="w-full aspect-square rounded-lg object-cover">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity flex items-center justify-center">
+                                    <button class="bg-primary rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform">
+                                        <i class="fa fa-play text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="font-medium mb-1 truncate">流行精选</h3>
+                            <p class="text-xs text-text-secondary truncate">Various Artists</p>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-xl p-4 hover:bg-dark-lighter/80 transition-all group">
+                            <div class="relative mb-4">
+                                <img src="https://picsum.photos/id/96/300/300" alt="专辑封面" class="w-full aspect-square rounded-lg object-cover">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity flex items-center justify-center">
+                                    <button class="bg-primary rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform">
+                                        <i class="fa fa-play text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="font-medium mb-1 truncate">摇滚经典</h3>
+                            <p class="text-xs text-text-secondary truncate">The Rockers</p>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-xl p-4 hover:bg-dark-lighter/80 transition-all group">
+                            <div class="relative mb-4">
+                                <img src="https://picsum.photos/id/119/300/300" alt="专辑封面" class="w-full aspect-square rounded-lg object-cover">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity flex items-center justify-center">
+                                    <button class="bg-primary rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform">
+                                        <i class="fa fa-play text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="font-medium mb-1 truncate">电子舞曲</h3>
+                            <p class="text-xs text-text-secondary truncate">DJ Collective</p>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-xl p-4 hover:bg-dark-lighter/80 transition-all group">
+                            <div class="relative mb-4">
+                                <img src="https://picsum.photos/id/174/300/300" alt="专辑封面" class="w-full aspect-square rounded-lg object-cover">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity flex items-center justify-center">
+                                    <button class="bg-primary rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform">
+                                        <i class="fa fa-play text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="font-medium mb-1 truncate">轻音乐</h3>
+                            <p class="text-xs text-text-secondary truncate">Peaceful Sounds</p>
+                        </div>
+                        
+                        <div class="bg-dark-lighter rounded-xl p-4 hover:bg-dark-lighter/80 transition-all group">
+                            <div class="relative mb-4">
+                                <img src="https://picsum.photos/id/3/300/300" alt="专辑封面" class="w-full aspect-square rounded-lg object-cover">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity flex items-center justify-center">
+                                    <button class="bg-primary rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform">
+                                        <i class="fa fa-play text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="font-medium mb-1 truncate">爵士风情</h3>
+                            <p class="text-xs text-text-secondary truncate">Jazz Trio</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 全部音乐 -->
+                <section>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">所有音乐</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 rounded-md bg-dark-lighter text-text-primary text-sm hover:bg-primary/10 hover:text-primary transition-colors">
+                                <i class="fa fa-sliders mr-1"></i>筛选
+                            </button>
+                            <button class="px-3 py-1 rounded-md bg-dark-lighter text-text-primary text-sm hover:bg-primary/10 hover:text-primary transition-colors">
+                                <i class="fa fa-sort mr-1"></i>排序
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-text-secondary border-b border-dark-lighter">
+                                    <th class="pb-3 pl-4 font-normal">#</th>
+                                    <th class="pb-3 font-normal">标题</th>
+                                    <th class="pb-3 font-normal">艺术家</th>
+                                    <th class="pb-3 font-normal">专辑</th>
+                                    <th class="pb-3 font-normal">时长</th>
+                                    <th class="pb-3 pr-4 font-normal text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 音乐列表项 -->
+                                <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                    <td class="py-3 pl-4">1</td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://picsum.photos/id/26/100/100" alt="歌曲封面" class="w-10 h-10 rounded object-cover">
+                                            <div>
+                                                <h4 class="font-medium">晴天</h4>
+                                                <p class="text-xs text-text-secondary">周杰伦</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-text-secondary">周杰伦</td>
+                                    <td class="text-text-secondary">叶惠美</td>
+                                    <td class="text-text-secondary">4:26</td>
+                                    <td class="pr-4">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-heart-o"></i>
+                                            </button>
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-dark-lighter/50 transition-colors bg-primary/5">
+                                    <td class="py-3 pl-4 text-primary">
+                                        <i class="fa fa-play"></i>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://picsum.photos/id/96/100/100" alt="歌曲封面" class="w-10 h-10 rounded object-cover">
+                                            <div>
+                                                <h4 class="font-medium text-primary">Hotel California</h4>
+                                                <p class="text-xs text-text-secondary">Eagles</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-text-secondary">Eagles</td>
+                                    <td class="text-text-secondary">Hotel California</td>
+                                    <td class="text-text-secondary">6:30</td>
+                                    <td class="pr-4">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="text-primary transition-colors">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                    <td class="py-3 pl-4">3</td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://picsum.photos/id/119/100/100" alt="歌曲封面" class="w-10 h-10 rounded object-cover">
+                                            <div>
+                                                <h4 class="font-medium">Shape of You</h4>
+                                                <p class="text-xs text-text-secondary">Ed Sheeran</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-text-secondary">Ed Sheeran</td>
+                                    <td class="text-text-secondary">÷</td>
+                                    <td class="text-text-secondary">3:53</td>
+                                    <td class="pr-4">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-heart-o"></i>
+                                            </button>
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                    <td class="py-3 pl-4">4</td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://picsum.photos/id/174/100/100" alt="歌曲封面" class="w-10 h-10 rounded object-cover">
+                                            <div>
+                                                <h4 class="font-medium">Hello</h4>
+                                                <p class="text-xs text-text-secondary">Adele</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-text-secondary">Adele</td>
+                                    <td class="text-text-secondary">25</td>
+                                    <td class="text-text-secondary">4:55</td>
+                                    <td class="pr-4">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-heart-o"></i>
+                                            </button>
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-dark-lighter/50 transition-colors">
+                                    <td class="py-3 pl-4">5</td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <img src="https://picsum.photos/id/3/100/100" alt="歌曲封面" class="w-10 h-10 rounded object-cover">
+                                            <div>
+                                                <h4 class="font-medium">Billie Jean</h4>
+                                                <p class="text-xs text-text-secondary">Michael Jackson</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-text-secondary">Michael Jackson</td>
+                                    <td class="text-text-secondary">Thriller</td>
+                                    <td class="text-text-secondary">4:54</td>
+                                    <td class="pr-4">
+                                        <div class="flex justify-end space-x-2">
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-heart-o"></i>
+                                            </button>
+                                            <button class="text-text-secondary hover:text-primary transition-colors">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-center">
+                        <nav class="flex items-center space-x-1">
+                            <a href="#" class="px-3 py-1 rounded-md bg-dark-lighter text-text-secondary hover:bg-primary/10 hover:text-primary transition-colors">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a href="#" class="px-3 py-1 rounded-md bg-primary text-white">1</a>
+                            <a href="#" class="px-3 py-1 rounded-md bg-dark-lighter text-text-secondary hover:bg-primary/10 hover:text-primary transition-colors">2</a>
+                            <a href="#" class="px-3 py-1 rounded-md bg-dark-lighter text-text-secondary hover:bg-primary/10 hover:text-primary transition-colors">3</a>
+                            <span class="px-3 py-1 text-text-secondary">...</span>
+                            <a href="#" class="px-3 py-1 rounded-md bg-dark-lighter text-text-secondary hover:bg-primary/10 hover:text-primary transition-colors">12</a>
+                            <a href="#" class="px-3 py-1 rounded-md bg-dark-lighter text-text-secondary hover:bg-primary/10 hover:text-primary transition-colors">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </nav>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 底部音乐播放器 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-dark-light z-50 border-t border-dark-lighter">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <!-- 当前播放的歌曲信息 -->
+                <div class="flex items-center space-x-3 w-1/4">
+                    <img src="https://picsum.photos/id/96/100/100" alt="当前播放歌曲封面" class="w-12 h-12 rounded object-cover">
+                    <div class="hidden sm:block">
+                        <h4 class="font-medium text-sm">Hotel California</h4>
+                        <p class="text-xs text-text-secondary">Eagles</p>
+                    </div>
+                    <button class="text-text-secondary hover:text-primary transition-colors">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
+                </div>
+                
+                <!-- 播放控制 -->
+                <div class="flex flex-col items-center justify-center w-2/4">
+                    <div class="flex items-center space-x-6">
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fa fa-random"></i>
+                        </button>
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fa fa-step-backward"></i>
+                        </button>
+                        <button class="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
+                            <i class="fa fa-pause"></i>
+                        </button>
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fa fa-step-forward"></i>
+                        </button>
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fa fa-repeat"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 w-full max-w-lg mt-2">
+                        <span class="text-xs text-text-secondary">2:15</span>
+                        <div class="flex-1 relative">
+                            <div class="h-1 bg-dark-lighter rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 35%"></div>
+                            </div>
+                            <div class="absolute left-[35%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <span class="text-xs text-text-secondary">6:30</span>
+                    </div>
+                </div>
+                
+                <!-- 音量控制 -->
+                <div class="flex items-center justify-end space-x-3 w-1/4">
+                    <button class="text-text-secondary hover:text-primary transition-colors">
+                        <i class="fa fa-list"></i>
+                    </button>
+                    <button class="text-text-secondary hover:text-primary transition-colors">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                    <div class="w-24 hidden md:block">
+                        <div class="h-1 bg-dark-lighter rounded-full overflow-hidden">
+                            <div class="h-full bg-text-secondary rounded-full" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 侧边栏切换
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+        
+        document.getElementById('sidebar-overlay').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+        
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-lg');
+                header.classList.add('bg-dark-light/95');
+                header.classList.add('backdrop-blur-sm');
+            } else {
+                header.classList.remove('shadow-lg');
+                header.classList.remove('bg-dark-light/95');
+                header.classList.remove('backdrop-blur-sm');
+            }
+        });
+        
+        // 模拟音频播放功能
+        const playButtons = document.querySelectorAll('button:has(.fa-play)');
+        playButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 这里只是模拟播放功能，实际应用中需要连接到音频API
+                console.log('播放按钮被点击');
+                // 更新播放状态UI
+                const currentPlayingRow = document.querySelector('tr.bg-primary\\/5');
+                if (currentPlayingRow) {
+                    currentPlayingRow.classList.remove('bg-primary/5');
+                    const previousPlayIcon = currentPlayingRow.querySelector('.fa-play');
+                    if (previousPlayIcon) {
+                        previousPlayIcon.parentElement.textContent = previousPlayIcon.parentElement.dataset.index;
+                    }
+                }
+                
+                const row = this.closest('tr');
+                row.classList.add('bg-primary/5');
+                
+                // 更新播放器信息
+                const songName = row.querySelector('h4').textContent;
+                const artistName = row.querySelector('p').textContent;
+                const albumCover = row.querySelector('img').src;
+                
+                document.querySelector('.music-player h4').textContent = songName;
+                document.querySelector('.music-player p').textContent = artistName;
+                document.querySelector('.music-player img').src = albumCover;
+            });
+        });
+        
+        // 音乐可视化效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const visualizer = document.querySelector('.music-visualizer');
+            if (visualizer) {
+                for (let i = 0; i < 12; i++) {
+                    const bar = document.createElement('span');
+                    bar.style.setProperty('--random', Math.random());
+                    visualizer.appendChild(bar);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
+    
