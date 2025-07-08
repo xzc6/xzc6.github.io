@@ -424,14 +424,14 @@
                 let imageQuality;
                 switch (compressionLevel) {
                     case 'low':
-                        imageQuality = 0.8; // 低压缩，高画质
+                        imageQuality = 0.7; // 降低低压缩级别的图片质量
                         break;
                     case 'high':
-                        imageQuality = 0.4; // 高压缩，低画质
+                        imageQuality = 0.3; // 进一步降低高压缩级别的图片质量
                         break;
                     case 'medium':
                     default:
-                        imageQuality = 0.6; // 中等压缩，中等画质
+                        imageQuality = 0.5; // 降低中等压缩级别的图片质量
                         break;
                 }
                 
@@ -446,9 +446,29 @@
                     const [copiedPage] = await compressedPdf.copyPages(pdfDoc, [i]);
                     compressedPdf.addPage(copiedPage);
                     
-                    // 优化图片（在实际环境中，这需要更复杂的处理）
-                    // 注意：完整的图片压缩需要额外的库支持，这里仅作示例
-                    // 实际应用中可考虑使用pdf-lib的图片压缩功能或其他专用库
+                    // 优化图片
+                    const page = compressedPdf.getPages()[i];
+                    const { width, height } = page.getSize();
+                    const contentStream = page.getContentStreams()[0];
+                    const operations = contentStream.getOperations();
+                    for (let j = 0; j < operations.length; j++) {
+                        const operation = operations[j];
+                        if (operation.name === 'Do') {
+                            const xObject = page.lookup(operation.operands[0]);
+                            if (xObject instanceof PDFLib.PDFImage) {
+                                const imageBytes = await xObject.asPng();
+                                // 使用 pako 进行更高级的压缩
+                                const compressedImageBytes = pako.deflate(imageBytes, { level: 9 }); 
+                                const newImage = await compressedPdf.embedPng(compressedImageBytes);
+                                page.drawImage(newImage, {
+                                    x: 0,
+                                    y: 0,
+                                    width: width,
+                                    height: height
+                                });
+                            }
+                        }
+                    }
                     
                     // 模拟处理延迟
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -459,7 +479,9 @@
                 progressText.textContent = '正在生成压缩后的PDF...';
                 
                 // 保存压缩后的PDF
-                const compressedPdfBytes = await compressedPdf.save();
+                const compressedPdfBytes = await compressedPdf.save({
+                    updateMetadata: false // 不更新元数据
+                });
                 
                 // 计算处理时间
                 const endTime = Date.now();
