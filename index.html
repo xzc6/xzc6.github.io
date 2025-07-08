@@ -3,79 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高性能PDF压缩工具</title>
+    <title>PDF上传测试工具</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind配置 -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#165DFF',
-                        secondary: '#0FC6C2',
-                        accent: '#722ED1',
-                        success: '#00B42A',
-                        warning: '#FF7D00',
-                        danger: '#F53F3F',
-                        dark: '#1D2129',
-                        'dark-2': '#4E5969',
-                        'light-1': '#F2F3F5',
-                        'light-2': '#E5E6EB',
-                        'light-3': '#C9CDD4'
-                    },
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
-                        'card-hover': '0 10px 30px rgba(0, 0, 0, 0.12)',
-                        'button': '0 2px 8px rgba(22, 93, 255, 0.2)',
-                        'button-hover': '0 4px 12px rgba(22, 93, 255, 0.3)',
-                    }
-                },
-            }
-        }
-    </script>
     
     <style type="text/tailwindcss">
         @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .bg-gradient-blue {
-                background: linear-gradient(135deg, #165DFF 0%, #0FC6C2 100%);
-            }
-            .text-gradient-blue {
-                background: linear-gradient(135deg, #165DFF 0%, #0FC6C2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-            .animate-pulse-slow {
-                animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            }
-            .transition-all-300 {
-                transition: all 0.3s ease;
-            }
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #c1c1c1;
-                border-radius: 10px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #a8a8a8;
-            }
             .file-selected {
                 border-color: #00B42A !important;
                 background-color: #00B42A/5 !important;
@@ -84,265 +17,101 @@
     </style>
 </head>
 <body class="font-inter bg-gray-50 text-dark min-h-screen flex flex-col">
-    <!-- 顶部导航 -->
-    <header class="bg-white shadow-sm sticky top-0 z-40 transition-all duration-300">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-center items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="bg-gradient-blue h-8 w-8 rounded-lg flex items-center justify-center">
-                        <i class="fa fa-file-pdf-o text-white text-xl"></i>
-                    </div>
-                    <span class="text-xl font-bold text-dark">PDF<span class="text-primary">压缩</span></span>
-                </div>
-            </div>
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-xl font-bold">PDF上传测试工具</h1>
         </div>
     </header>
 
-    <!-- 主内容 -->
-    <main class="flex-grow">
-        <!-- 英雄区域 -->
-        <section class="bg-gradient-to-br from-primary/5 to-white py-12 md:py-16">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark mb-4 leading-tight">
-                    高性能<span class="text-gradient-blue">PDF压缩</span>工具
-                </h1>
-                <p class="text-dark-2 text-lg md:text-xl max-w-3xl mx-auto mb-8">
-                    通过先进的图像优化和PDF结构重组，实现高达80%的压缩率，同时保持文档清晰度
-                </p>
-            </div>
-        </section>
-
-        <!-- 上传区域 -->
-        <section class="py-12 -mt-16">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl mx-auto">
-                    <div class="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all-300 p-8 relative overflow-hidden">
-                        <!-- 装饰元素 -->
-                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full"></div>
-                        <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-secondary/5 rounded-full"></div>
-                        
-                        <!-- 上传区域 -->
-                        <div id="upload-container" class="relative z-10">
-                            <div id="drop-area" class="border-2 border-dashed border-light-2 rounded-xl p-10 text-center cursor-pointer hover:border-primary/50 transition-all-300 bg-light-1/50">
-                                <div class="mb-6">
-                                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
-                                        <i class="fa fa-cloud-upload text-4xl text-primary"></i>
-                                    </div>
-                                    <h3 class="text-xl font-semibold text-dark mb-2">拖放您的PDF文件到此处</h3>
-                                    <p class="text-dark-2 mb-6">或者</p>
-                                    <label for="file-input" class="px-6 py-3 bg-primary text-white rounded-lg shadow-button hover:shadow-button-hover hover:bg-primary/90 transition-all-300 cursor-pointer inline-flex items-center">
-                                        <i class="fa fa-plus mr-2"></i> 选择文件
-                                        <input type="file" id="file-input" accept=".pdf" class="hidden" />
-                                    </label>
-                                    <p class="text-dark-2 mt-4 text-sm">最大文件大小: 100MB</p>
-                                </div>
-                                <!-- 文件选择后显示的信息 -->
-                                <div id="file-info" class="hidden mt-6 p-4 bg-white border border-light-2 rounded-lg">
-                                    <div class="flex items-center">
-                                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
-                                            <i class="fa fa-file-pdf-o text-primary"></i>
-                                        </div>
-                                        <div class="flex-grow text-left">
-                                            <p class="font-medium text-dark" id="file-name">document.pdf</p>
-                                            <p class="text-dark-2 text-sm" id="file-size">2.4 MB</p>
-                                        </div>
-                                        <button id="remove-file" class="text-danger hover:text-danger/80 transition-all-300">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <div id="drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-all-300">
+                    <div class="mb-4">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                            <i class="fa fa-cloud-upload text-2xl text-primary"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">拖放PDF文件到此处</h3>
+                        <p class="text-gray-500 mb-4">或者</p>
+                        <label for="file-input" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-all-300 cursor-pointer inline-flex items-center">
+                            <i class="fa fa-plus mr-2"></i> 选择文件
+                            <input type="file" id="file-input" accept=".pdf" class="hidden" />
+                        </label>
+                    </div>
+                    
+                    <div id="file-info" class="hidden mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center mr-3">
+                                <i class="fa fa-file-pdf-o text-primary"></i>
                             </div>
-                            
-                            <!-- 压缩选项 -->
-                            <div id="compression-options" class="mt-8 hidden">
-                                <h3 class="text-lg font-semibold text-dark mb-4">压缩选项</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div class="compression-option border border-light-2 rounded-lg p-4 cursor-pointer hover:border-primary/50 transition-all-300 bg-white" data-level="low">
-                                        <div class="flex items-start">
-                                            <div class="mt-1 mr-3 w-5 h-5 rounded-full border-2 border-light-3 flex items-center justify-center compression-radio">
-                                                <div class="w-3 h-3 rounded-full bg-primary hidden compression-radio-inner"></div>
-                                            </div>
-                                            <div>
-                                                <h4 class="font-medium text-dark">低压缩</h4>
-                                                <p class="text-dark-2 text-sm mt-1">保留最高质量，文件大小减少较少</p>
-                                                <p class="text-success text-xs mt-1">推荐用于图片较多的文档</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="compression-option border border-light-2 rounded-lg p-4 cursor-pointer hover:border-primary/50 transition-all-300 bg-white bg-primary/5 border-primary/30" data-level="medium">
-                                        <div class="flex items-start">
-                                            <div class="mt-1 mr-3 w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center compression-radio">
-                                                <div class="w-3 h-3 rounded-full bg-primary compression-radio-inner"></div>
-                                            </div>
-                                            <div>
-                                                <h4 class="font-medium text-dark">中等压缩</h4>
-                                                <p class="text-dark-2 text-sm mt-1">平衡质量和文件大小</p>
-                                                <p class="text-success text-xs mt-1">大多数文档的最佳选择</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="compression-option border border-light-2 rounded-lg p-4 cursor-pointer hover:border-primary/50 transition-all-300 bg-white" data-level="high">
-                                        <div class="flex items-start">
-                                            <div class="mt-1 mr-3 w-5 h-5 rounded-full border-2 border-light-3 flex items-center justify-center compression-radio">
-                                                <div class="w-3 h-3 rounded-full bg-primary hidden compression-radio-inner"></div>
-                                            </div>
-                                            <div>
-                                                <h4 class="font-medium text-dark">高压缩</h4>
-                                                <p class="text-dark-2 text-sm mt-1">大幅减小文件大小，质量略有损失</p>
-                                                <p class="text-success text-xs mt-1">推荐用于文本为主的文档</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 高级选项 -->
-                                <div class="mt-6 p-4 bg-light-1/50 rounded-lg">
-                                    <h4 class="font-medium text-dark mb-3">高级选项</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="optimize-images" class="mr-2" checked>
-                                            <label for="optimize-images" class="text-dark-2">优化图像（主要压缩来源）</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="remove-metadata" class="mr-2" checked>
-                                            <label for="remove-metadata" class="text-dark-2">移除元数据</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="compress-fonts" class="mr-2">
-                                            <label for="compress-fonts" class="text-dark-2">压缩字体</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="remove-annotations" class="mr-2">
-                                            <label for="remove-annotations" class="text-dark-2">移除注释和标记</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 压缩按钮 -->
-                                <div class="mt-6 text-center">
-                                    <button id="compress-button" class="px-8 py-3 bg-primary text-white rounded-lg shadow-button hover:shadow-button-hover hover:bg-primary/90 transition-all-300 inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                                        <i class="fa fa-compress mr-2"></i> 开始压缩
-                                    </button>
+                            <div class="flex-grow text-left">
+                                <p class="font-medium text-gray-800" id="file-name">document.pdf</p>
+                                <p class="text-gray-500 text-sm" id="file-size">2.4 MB</p>
+                            </div>
+                            <button id="remove-file" class="text-red-500 hover:text-red-600 transition-all-300">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="upload-result" class="hidden mt-6 p-4 rounded-lg">
+                    <div id="success-message" class="hidden bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 pt-0.5">
+                                <i class="fa fa-check-circle text-green-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium">文件上传成功</h3>
+                                <div class="mt-2 text-sm">
+                                    <p>文件名: <span id="uploaded-filename">document.pdf</span></p>
+                                    <p>文件大小: <span id="uploaded-filesize">2.4 MB</span></p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- 加载状态 -->
-                        <div id="loading-container" class="relative z-10 hidden">
-                            <div class="text-center py-8">
-                                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
-                                    <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                                </div>
-                                <h3 class="text-xl font-semibold text-dark mb-2">正在处理您的PDF文件</h3>
-                                <p class="text-dark-2 mb-4">请稍候，这可能需要几分钟时间...</p>
-                                <div class="w-full bg-light-2 rounded-full h-2.5 mb-6">
-                                    <div id="progress-bar" class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
-                                </div>
-                                <p id="progress-text" class="text-dark-2 text-sm">准备中...</p>
+                    </div>
+                    
+                    <div id="error-message" class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 pt-0.5">
+                                <i class="fa fa-exclamation-circle text-red-500"></i>
                             </div>
-                        </div>
-                        
-                        <!-- 结果区域 -->
-                        <div id="result-container" class="relative z-10 hidden">
-                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-                                <div class="flex-shrink-0">
-                                    <div class="w-24 h-32 bg-light-1 rounded-lg flex items-center justify-center overflow-hidden">
-                                        <i class="fa fa-file-pdf-o text-6xl text-primary/70"></i>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex-grow">
-                                    <h3 class="text-xl font-semibold text-dark mb-2" id="result-filename">compressed.pdf</h3>
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                        <div>
-                                            <p class="text-dark-2 text-sm mb-1">原始大小</p>
-                                            <p class="font-medium text-dark" id="original-size">2.4 MB</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <p class="text-dark-2 text-sm mb-1">压缩后</p>
-                                            <p class="font-medium text-success" id="compressed-size">0.5 MB</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <p class="text-dark-2 text-sm mb-1">压缩率</p>
-                                            <p class="font-medium text-primary" id="compression-rate">79%</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <p class="text-dark-2 text-sm mb-1">处理时间</p>
-                                            <p class="font-medium text-dark" id="processing-time">18 秒</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- 压缩分析图表 -->
-                                    <div class="mt-6">
-                                        <h4 class="font-medium text-dark mb-3">压缩分析</h4>
-                                        <div class="h-64">
-                                            <canvas id="compression-chart"></canvas>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex flex-wrap gap-3 mt-6">
-                                        <button id="download-button" class="px-6 py-3 bg-primary text-white rounded-lg shadow-button hover:shadow-button-hover hover:bg-primary/90 transition-all-300 inline-flex items-center">
-                                            <i class="fa fa-download mr-2"></i> 下载文件
-                                        </button>
-                                        <button id="compress-another-button" class="px-6 py-3 border border-light-2 text-dark rounded-lg hover:border-primary/50 hover:text-primary transition-all-300 inline-flex items-center">
-                                            <i class="fa fa-plus mr-2"></i> 压缩另一个
-                                        </button>
-                                    </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium">上传失败</h3>
+                                <div class="mt-2 text-sm" id="error-details">
+                                    <!-- 错误信息将显示在这里 -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- 页脚 -->
-    <footer class="bg-dark text-white py-12 mt-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>© 2025 高性能PDF压缩工具. 所有权利保留.</p>
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 PDF上传测试工具</p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
         // DOM元素
         const dropArea = document.getElementById('drop-area');
         const fileInput = document.getElementById('file-input');
-        const uploadContainer = document.getElementById('upload-container');
-        const compressionOptions = document.getElementById('compression-options');
-        const loadingContainer = document.getElementById('loading-container');
-        const resultContainer = document.getElementById('result-container');
-        const compressButton = document.getElementById('compress-button');
-        const downloadButton = document.getElementById('download-button');
-        const compressAnotherButton = document.getElementById('compress-another-button');
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const resultFilename = document.getElementById('result-filename');
-        const originalSize = document.getElementById('original-size');
-        const compressedSize = document.getElementById('compressed-size');
-        const compressionRate = document.getElementById('compression-rate');
-        const processingTime = document.getElementById('processing-time');
         const fileInfo = document.getElementById('file-info');
         const fileName = document.getElementById('file-name');
         const fileSize = document.getElementById('file-size');
         const removeFile = document.getElementById('remove-file');
-        
-        // 高级选项
-        const optimizeImages = document.getElementById('optimize-images');
-        const removeMetadata = document.getElementById('remove-metadata');
-        const compressFonts = document.getElementById('compress-fonts');
-        const removeAnnotations = document.getElementById('remove-annotations');
+        const uploadResult = document.getElementById('upload-result');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const errorDetails = document.getElementById('error-details');
+        const uploadedFilename = document.getElementById('uploaded-filename');
+        const uploadedFilesize = document.getElementById('uploaded-filesize');
         
         // 存储上传的文件
         let uploadedFile = null;
-        let compressionLevel = 'medium'; // 默认中等压缩
         
         // 拖拽上传相关
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -370,152 +139,3 @@
         function unhighlight() {
             dropArea.classList.remove('border-primary');
             dropArea.classList.remove('bg-primary/5');
-        }
-        
-        dropArea.addEventListener('drop', handleDrop, false);
-        
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            
-            if (files.length > 0) {
-                handleFiles(files[0]);
-            }
-        }
-        
-        // 文件选择
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                handleFiles(fileInput.files[0]);
-            }
-        });
-        
-        // 移除文件
-        removeFile.addEventListener('click', () => {
-            uploadedFile = null;
-            fileInput.value = '';
-            fileInfo.classList.add('hidden');
-            dropArea.classList.remove('file-selected');
-            compressionOptions.classList.add('hidden');
-            compressButton.disabled = true;
-        });
-        
-        // 处理选中的文件
-        function handleFiles(file) {
-            if (file.type !== 'application/pdf') {
-                alert('请上传PDF格式的文件！');
-                return;
-            }
-            
-            uploadedFile = file;
-            
-            // 更新文件信息显示
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.classList.remove('hidden');
-            dropArea.classList.add('file-selected');
-            
-            // 显示压缩选项
-            compressionOptions.classList.remove('hidden');
-            compressButton.disabled = false;
-            
-            // 滚动到压缩选项
-            compressionOptions.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        // 显示压缩选项
-        function showCompressionOptions() {
-            // 更新文件名和大小显示
-            const fileSize = formatFileSize(uploadedFile.size);
-            originalSize.textContent = fileSize;
-            
-            // 显示压缩选项
-            compressionOptions.classList.remove('hidden');
-            compressButton.disabled = false;
-            
-            // 滚动到压缩选项
-            compressionOptions.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        // 压缩选项切换
-        const compressionOptionElements = document.querySelectorAll('.compression-option');
-        compressionOptionElements.forEach(option => {
-            option.addEventListener('click', () => {
-                // 重置所有选项
-                compressionOptionElements.forEach(opt => {
-                    opt.classList.remove('bg-primary/5');
-                    opt.classList.remove('border-primary/30');
-                    opt.classList.add('bg-white');
-                    
-                    const radio = opt.querySelector('.compression-radio');
-                    radio.classList.remove('border-primary');
-                    radio.classList.add('border-light-3');
-                    
-                    const radioInner = opt.querySelector('.compression-radio-inner');
-                    radioInner.classList.add('hidden');
-                });
-                
-                // 设置选中的选项
-                option.classList.add('bg-primary/5');
-                option.classList.add('border-primary/30');
-                option.classList.remove('bg-white');
-                
-                const radio = option.querySelector('.compression-radio');
-                radio.classList.add('border-primary');
-                radio.classList.remove('border-light-3');
-                
-                const radioInner = option.querySelector('.compression-radio-inner');
-                radioInner.classList.remove('hidden');
-                
-                // 保存选中的压缩级别
-                compressionLevel = option.dataset.level;
-            });
-        });
-        
-        // 压缩按钮点击
-        compressButton.addEventListener('click', async () => {
-            if (!uploadedFile) return;
-            
-            // 显示加载状态
-            uploadContainer.classList.add('hidden');
-            loadingContainer.classList.remove('hidden');
-            
-            try {
-                // 读取文件
-                const arrayBuffer = await readFileAsArrayBuffer(uploadedFile);
-                
-                // 更新进度
-                progressBar.style.width = '5%';
-                progressText.textContent = '正在解析PDF文件...';
-                
-                // 加载PDF
-                const startTime = Date.now();
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                
-                // 更新进度
-                progressBar.style.width = '15%';
-                progressText.textContent = '正在分析PDF内容...';
-                
-                // 准备压缩统计
-                const compressionStats = {
-                    originalSize: uploadedFile.size,
-                    imageCount: 0,
-                    imageSize: 0,
-                    optimizedImageSize: 0,
-                    fontCount: 0,
-                    fontSize: 0,
-                    optimizedFontSize: 0,
-                    metadataRemoved: 0,
-                    annotationsRemoved: 0
-                };
-                
-                // 获取页面数量
-                const pages = pdfDoc.getPages();
-                const numPages = pages.length;
-                
-                // 创建新的PDF文档
-                const compressedPdf = await PDFLib.PDFDocument.create();
-                
-                // 设置图片质量
-                let imageQuality;
-                switch (compressionLevel) {
