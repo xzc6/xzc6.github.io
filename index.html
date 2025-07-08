@@ -76,6 +76,10 @@
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                 background: #a8a8a8;
             }
+            .file-selected {
+                border-color: #00B42A !important;
+                background-color: #00B42A/5 !important;
+            }
         }
     </style>
 </head>
@@ -131,6 +135,21 @@
                                         <input type="file" id="file-input" accept=".pdf" class="hidden" />
                                     </label>
                                     <p class="text-dark-2 mt-4 text-sm">最大文件大小: 100MB</p>
+                                </div>
+                                <!-- 文件选择后显示的信息 -->
+                                <div id="file-info" class="hidden mt-6 p-4 bg-white border border-light-2 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                                            <i class="fa fa-file-pdf-o text-primary"></i>
+                                        </div>
+                                        <div class="flex-grow text-left">
+                                            <p class="font-medium text-dark" id="file-name">document.pdf</p>
+                                            <p class="text-dark-2 text-sm" id="file-size">2.4 MB</p>
+                                        </div>
+                                        <button id="remove-file" class="text-danger hover:text-danger/80 transition-all-300">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -310,6 +329,10 @@
         const compressedSize = document.getElementById('compressed-size');
         const compressionRate = document.getElementById('compression-rate');
         const processingTime = document.getElementById('processing-time');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const removeFile = document.getElementById('remove-file');
         
         // 高级选项
         const optimizeImages = document.getElementById('optimize-images');
@@ -367,6 +390,16 @@
             }
         });
         
+        // 移除文件
+        removeFile.addEventListener('click', () => {
+            uploadedFile = null;
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            dropArea.classList.remove('file-selected');
+            compressionOptions.classList.add('hidden');
+            compressButton.disabled = true;
+        });
+        
         // 处理选中的文件
         function handleFiles(file) {
             if (file.type !== 'application/pdf') {
@@ -375,7 +408,19 @@
             }
             
             uploadedFile = file;
-            showCompressionOptions();
+            
+            // 更新文件信息显示
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.remove('hidden');
+            dropArea.classList.add('file-selected');
+            
+            // 显示压缩选项
+            compressionOptions.classList.remove('hidden');
+            compressButton.disabled = false;
+            
+            // 滚动到压缩选项
+            compressionOptions.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
         // 显示压缩选项
@@ -474,316 +519,3 @@
                 // 设置图片质量
                 let imageQuality;
                 switch (compressionLevel) {
-                    case 'low':
-                        imageQuality = 0.8; // 低压缩，高画质
-                        break;
-                    case 'high':
-                        imageQuality = 0.3; // 高压缩，低画质
-                        break;
-                    case 'medium':
-                    default:
-                        imageQuality = 0.5; // 中等压缩，中等画质
-                        break;
-                }
-                
-                // 移除元数据
-                if (removeMetadata.checked) {
-                    pdfDoc.removeCreator();
-                    pdfDoc.removeAuthor();
-                    pdfDoc.removeProducer();
-                    pdfDoc.removeCreationDate();
-                    pdfDoc.removeModificationDate();
-                    compressionStats.metadataRemoved = 1;
-                }
-                
-                // 处理每一页
-                for (let i = 0; i < numPages; i++) {
-                    // 更新进度
-                    const progress = 15 + Math.floor((i / numPages) * 65);
-                    progressBar.style.width = `${progress}%`;
-                    progressText.textContent = `正在处理页面 ${i + 1}/${numPages}...`;
-                    
-                    // 复制页面
-                    const [copiedPage] = await compressedPdf.copyPages(pdfDoc, [i]);
-                    
-                    // 分析并优化页面内容
-                    await analyzeAndOptimizePage(pdfDoc, copiedPage, compressionStats, imageQuality);
-                    
-                    // 添加到新文档
-                    compressedPdf.addPage(copiedPage);
-                    
-                    // 模拟处理延迟
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-                
-                // 更新进度
-                progressBar.style.width = '85%';
-                progressText.textContent = '正在优化PDF结构...';
-                
-                // 压缩字体
-                if (compressFonts.checked) {
-                    await compressDocumentFonts(compressedPdf, compressionStats);
-                }
-                
-                // 更新进度
-                progressBar.style.width = '95%';
-                progressText.textContent = '正在生成压缩后的PDF...';
-                
-                // 保存压缩后的PDF
-                const compressedPdfBytes = await compressedPdf.save({
-                    useObjectStreams: true,
-                    useFlateCompressionForStreams: true,
-                    updateFieldAppearances: true
-                });
-                
-                // 计算处理时间
-                const endTime = Date.now();
-                const processTime = Math.floor((endTime - startTime) / 1000);
-                
-                // 创建Blob对象
-                const compressedBlob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
-                
-                // 更新进度到100%
-                progressBar.style.width = '100%';
-                progressText.textContent = '压缩完成！';
-                
-                // 显示结果
-                setTimeout(() => {
-                    loadingContainer.classList.add('hidden');
-                    resultContainer.classList.remove('hidden');
-                    
-                    // 更新结果显示
-                    resultFilename.textContent = uploadedFile.name;
-                    
-                    // 计算压缩后的大小
-                    const originalSizeBytes = uploadedFile.size;
-                    const compressedSizeBytes = compressedBlob.size;
-                    
-                    // 更新UI
-                    compressedSize.textContent = formatFileSize(compressedSizeBytes);
-                    
-                    // 计算压缩率
-                    const reduction = 100 - Math.floor((compressedSizeBytes / originalSizeBytes) * 100);
-                    compressionRate.textContent = `${reduction}%`;
-                    
-                    // 显示处理时间
-                    processingTime.textContent = `${processTime} 秒`;
-                    
-                    // 生成压缩分析图表
-                    generateCompressionChart(compressionStats, originalSizeBytes, compressedSizeBytes);
-                    
-                    // 存储压缩后的文件用于下载
-                    downloadButton.onclick = () => {
-                        downloadFile(compressedBlob, uploadedFile.name.replace('.pdf', '_compressed.pdf'));
-                    };
-                    
-                    // 滚动到结果区域
-                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 1000);
-            } catch (error) {
-                console.error('PDF压缩失败:', error);
-                alert('PDF压缩失败，请重试。错误信息: ' + error.message);
-                
-                // 重置界面
-                loadingContainer.classList.add('hidden');
-                uploadContainer.classList.remove('hidden');
-                compressButton.disabled = false;
-            }
-        });
-        
-        // 分析并优化页面内容
-        async function analyzeAndOptimizePage(originalDoc, page, stats, imageQuality) {
-            // 移除注释
-            if (removeAnnotations.checked) {
-                const annotations = page.getAnnotations();
-                stats.annotationsRemoved = annotations.length;
-                annotations.forEach(annotation => {
-                    page.removeAnnotation(annotation);
-                });
-            }
-            
-            // 处理页面上的图片
-            if (optimizeImages.checked) {
-                const { operations } = page.getContent();
-                const newOperations = [];
-                
-                for (const operation of operations) {
-                    if (operation.name === 'Do') {
-                        // 这是一个图片操作
-                        const imageName = operation.operands[0];
-                        const image = page.resources.getImage(imageName);
-                        
-                        if (image) {
-                            stats.imageCount++;
-                            
-                            // 获取图片原始大小
-                            const imageBytes = await image.getData();
-                            stats.imageSize += imageBytes.length;
-                            
-                            // 压缩图片
-                            let optimizedImage;
-                            
-                            if (image.isJpg()) {
-                                // JPG图片 - 使用质量压缩
-                                optimizedImage = await optimizeJpgImage(image, imageQuality);
-                                stats.optimizedImageSize += optimizedImage.byteLength;
-                            } else if (image.isPng()) {
-                                // PNG图片 - 使用质量压缩
-                                optimizedImage = await optimizePngImage(image, imageQuality);
-                                stats.optimizedImageSize += optimizedImage.byteLength;
-                            } else {
-                                // 其他类型图片，直接使用
-                                optimizedImage = imageBytes;
-                                stats.optimizedImageSize += imageBytes.length;
-                            }
-                            
-                            // 替换原始图片
-                            const newImage = await originalDoc.embedPng(optimizedImage);
-                            page.resources.setImage(imageName, newImage);
-                        }
-                    }
-                    
-                    // 添加操作到新的操作列表
-                    newOperations.push(operation);
-                }
-                
-                // 更新页面内容
-                page.setContent(newOperations);
-            }
-        }
-        
-        // 压缩文档字体
-        async function compressDocumentFonts(pdfDoc, stats) {
-            // 获取所有字体
-            const fonts = pdfDoc.getFonts();
-            stats.fontCount = fonts.length;
-            
-            for (const font of fonts) {
-                // 获取字体原始大小
-                const fontBytes = await font.getData();
-                stats.fontSize += fontBytes.length;
-                
-                // 简单压缩：移除未使用的字形
-                // 注意：完整的字体压缩需要更复杂的处理
-                const compressedFontBytes = fontBytes; // 示例中不实际压缩字体
-                stats.optimizedFontSize += compressedFontBytes.length;
-            }
-        }
-        
-        // 优化JPG图片
-        async function optimizeJpgImage(image, quality) {
-            // 实际应用中，这里应该使用更高级的JPG压缩库
-            // 这里使用pako进行简单的模拟压缩
-            const imageBytes = await image.getData();
-            
-            // 简单压缩：根据质量参数减少数据量
-            const compressedSize = Math.floor(imageBytes.length * quality);
-            const compressedBytes = new Uint8Array(compressedSize);
-            
-            // 简单采样：每隔几个像素取一个值
-            const sampleRate = Math.max(1, Math.floor(1 / quality));
-            for (let i = 0, j = 0; i < imageBytes.length && j < compressedSize; i += sampleRate, j++) {
-                compressedBytes[j] = imageBytes[i];
-            }
-            
-            // 使用pako进行额外压缩
-            return pako.deflate(compressedBytes);
-        }
-        
-        // 优化PNG图片
-        async function optimizePngImage(image, quality) {
-            // 实际应用中，这里应该使用更高级的PNG压缩库
-            // 这里使用pako进行简单的模拟压缩
-            const imageBytes = await image.getData();
-            
-            // 简单压缩：根据质量参数减少数据量
-            const compressedSize = Math.floor(imageBytes.length * quality);
-            const compressedBytes = new Uint8Array(compressedSize);
-            
-            // 简单采样：每隔几个像素取一个值
-            const sampleRate = Math.max(1, Math.floor(1 / quality));
-            for (let i = 0, j = 0; i < imageBytes.length && j < compressedSize; i += sampleRate, j++) {
-                compressedBytes[j] = imageBytes[i];
-            }
-            
-            // 使用pako进行额外压缩
-            return pako.deflate(compressedBytes);
-        }
-        
-        // 压缩另一个文件按钮点击
-        compressAnotherButton.addEventListener('click', () => {
-            resultContainer.classList.add('hidden');
-            uploadContainer.classList.remove('hidden');
-            fileInput.value = '';
-            uploadedFile = null;
-            
-            // 重置进度条
-            progressBar.style.width = '0%';
-            progressText.textContent = '准备中...';
-            
-            // 滚动到上传区域
-            dropArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-        
-        // 读取文件为ArrayBuffer
-        function readFileAsArrayBuffer(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = () => reject(reader.error);
-                reader.readAsArrayBuffer(file);
-            });
-        }
-        
-        // 下载文件
-        function downloadFile(blob, filename) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            
-            // 清理
-            setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }, 0);
-        }
-        
-        // 格式化文件大小
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        // 生成压缩分析图表
-        function generateCompressionChart(stats, originalSize, compressedSize) {
-            const ctx = document.getElementById('compression-chart').getContext('2d');
-            
-            // 计算各部分节省的大小
-            const imageSaved = stats.imageSize - stats.optimizedImageSize;
-            const fontSaved = stats.fontSize - stats.optimizedFontSize;
-            const metadataSaved = stats.metadataRemoved ? 10240 : 0; // 假设元数据大小为10KB
-            const annotationsSaved = stats.annotationsRemoved * 512; // 假设每个注释512字节
-            const otherSaved = (originalSize - compressedSize) - imageSaved - fontSaved - metadataSaved - annotationsSaved;
-            
-            // 创建图表
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['图像优化', '字体压缩', '元数据移除', '注释移除', '其他优化'],
-                    datasets: [{
-                        data: [imageSaved, fontSaved, metadataSaved, annotationsSaved, otherSaved],
-                        backgroundColor: [
-                            '#165DFF',
-                            '#0FC6C2',
-                            '#722ED1',
-                            '#FF7D00',
-                            '#F53F3F'
-                        ],
